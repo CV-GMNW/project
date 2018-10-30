@@ -8,26 +8,26 @@ def find_rel_locations(point_correspondences):
 
     for cli in range(len(point_correspondences)):
         avg_offset = (0, 0)
+        n = len(point_correspondences[cli])
         for c in point_correspondences[cli]:
             x_offs = c[1][0] - c[0][0]
             y_offs = c[1][1] - c[0][1]
-            avg_offset += (x_offs, y_offs) / len(point_correspondences[cli])
+            avg_offset += (x_offs / n, y_offs / n)
         rel_locs.append(avg_offset)
 
     return rel_locs
 
-def cumulative(list_to_accum):
-    cum = list_to_accum[0]
-    for item in list_to_accum[1:]:
-        cum.append(cum[-1] + item)
-    return cum
-
 def place_on_black(frame, w, h, x, y):
+    # TODO
     pass
 
 def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     # 1. find frames locations relative to original
-    cum_rel_locs = cumulative(find_rel_locations(point_correspondences))
+    rel_locs = find_rel_locations(point_correspondences)
+    cum_rel_locs = [rel_locs[0]]
+    for loc in rel_locs[1:]:
+        cum_sum = tuple([a + b for (a,b) in zip(cum_rel_locs[-1], loc)])
+        cum_rel_locs.append(cum_sum)
 
     # 2. find size of frame needed
     min_x = 0
@@ -46,10 +46,10 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     w_new = max_x - min_x + w_orig
     h_new = max_y - min_y + h_orig
 
-    # position all frames in the new larger frame
-    frame_positions = cum_rel_locs - (min_x, min_y)
+    # 3. position all frames in the new larger frame
+    frame_positions = [(x - min_x, y - min_y) for (x, y) in cum_rel_locs]
 
-    # place frames
+    # 4. place frames
     frames_new = []
     for i in range(len(frames)):
         (pos_x, pos_y) = frame_positions[i]
