@@ -26,6 +26,7 @@ def place_on_black(frame, w, h, x, y):
     for i in range(h):
         for j in range(w):
             stitched_frame[i + y][j + x] = frame[i][j]
+    return stitched_frame
 
 
 def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
