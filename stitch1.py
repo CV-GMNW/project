@@ -1,7 +1,10 @@
+import numpy as np
+
 
 def src_dest_2_correspondences(src_pnts, dest_pnts):
     # probably needed
     pass
+
 
 def find_rel_locations(point_correspondences):
     rel_locs = [(0, 0)]
@@ -17,9 +20,13 @@ def find_rel_locations(point_correspondences):
 
     return rel_locs
 
+
 def place_on_black(frame, w, h, x, y):
-    # TODO
-    pass
+    stitched_frame = np.zeros((h, w, 3))
+    for i in range(h):
+        for j in range(w):
+            stitched_frame[i + y][j + x] = frame[i][j]
+
 
 def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     # 1. find frames locations relative to original
