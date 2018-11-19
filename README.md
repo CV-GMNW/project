@@ -9,4 +9,4 @@ vid2img.py usage:
 
 img2vid.py usage:
 
-    python img2vid.py <frame_images_dir> <fps INT> <output_video_path>
+    python img2vid.py <frame_images_dir> <fps> <output_video_path>
