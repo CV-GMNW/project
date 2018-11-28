@@ -2,8 +2,7 @@ import numpy as np
 
 
 def src_dest_2_correspondences(src_pnts, dest_pnts):
-    # probably needed
-    pass
+    return np.concatenate(src_pnts.dest_pnts).reshape((len(src_pnts), 2, 2))
 
 
 def find_rel_locations(point_correspondences):
