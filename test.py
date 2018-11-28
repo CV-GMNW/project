@@ -28,14 +28,14 @@ flann = cv2.FlannBasedMatcher(index_params, search_params)
 matches = flann.knnMatch(des1,des2,k=2)
 
 # for mat in matches:
-# 	img_idx = mat.queryIdx
-# 	img2_idx = mat.trainIdx
-# 	(x1,y1) = kp1[img1_idx].pt
-# 	(x2,y2) = kp2[img2_idx].pt
+#   img_idx = mat.queryIdx
+#   img2_idx = mat.trainIdx
+#   (x1,y1) = kp1[img1_idx].pt
+#   (x2,y2) = kp2[img2_idx].pt
 
 #     # Append to each list
-# 	list_kp1.append((x1, y1))
-# 	list_kp2.append((x2, y2))
+#   list_kp1.append((x1, y1))
+#   list_kp2.append((x2, y2))
 
 # store all the good matches as per Lowe's ratio test.
 # good = []
@@ -54,11 +54,11 @@ for i,(m,n) in enumerate(matches):
         good.append(m)
 
 MIN_MATCH_COUNT = 1
-if len(good) > MIN_MATCHs_COUNT:
-	src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
-	dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+if len(good) > MIN_MATCH_COUNT:
+  src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+  dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
 
-	print((src_pts))
+  print((src_pts))
 
 draw_params = dict(matchColor = (0,255,0),
                    singlePointColor = (255,0,0),
