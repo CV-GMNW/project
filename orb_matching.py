@@ -3,12 +3,9 @@ import cv2
 from matplotlib import pyplot as plt
 
 
-def orb_matching(im1_name, im2_name):
+def orb_matching(img1, img2):
   MIN_MATCH_COUNT = 10
   FLANN_INDEX_LSH = 6
-
-  img1 = cv2.imread(im2_name, 0)          # queryImage
-  img2 = cv2.imread(im1_name, 0) # trainImage
 
   # Initiate SIFT detector
   orb = cv2.ORB_create()
@@ -51,17 +48,19 @@ def orb_matching(im1_name, im2_name):
   good = []
   # ratio test as per Lowe's paper
   for i,(m,n) in enumerate(matches):
-      if m.distance < 0.7 *n.distance:
+      if m.distance < 0.5 *n.distance:
           matchesMask[i]=[1,0]
           good.append(m)
 
   # MIN_MATCH_COUNT = 1
   # if len(good) > MIN_MATCH_COUNT:
-  src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
-  dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+  src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 2)
+  dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
 
   return src_pts, dst_pts
 
 if __name__ == '__main__':
-  src1, dst = orb_matching('ctd1.jpg', 'ctd2.jpg')
+  img1 = cv2.imread('ctd2.jpg', 0)
+  img2 = cv2.imread('ctd1.jpg', 0)
+  src1, dst = orb_matching(img1, img2)
   print(src1)
