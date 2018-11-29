@@ -49,7 +49,7 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
         cum_rel_locs.append(cum_sum)
 
     cum_rel_locs = np.int32(np.array(cum_rel_locs))
-    print cum_rel_locs
+    # print cum_rel_locs
 
     # 2. find size of frame needed
     min_x = 0
@@ -69,7 +69,6 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     h_new = max_y + 1 - min_y + h_orig
 
     OUTPUT_SIZE = (w_new, h_new)
-
     print "  generating new frames..."
 
     # 3. position all frames in the new larger frame
@@ -93,7 +92,9 @@ if __name__ == '__main__':
     corr = get_correspondences(frames)
     print "stitching..."
     new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
-    save_frames(new_frames, 'output')
-    # create_video_from_frames(new_frames, 'test_output.mp4', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
+    new_frames_list = [new_frame for new_frame in new_frames]
+
+    save_frames(new_frames_list, 'output')
+    create_video_from_frames(new_frames_list, 'test_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
     print "Done."
 

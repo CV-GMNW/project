@@ -11,11 +11,10 @@ def load_frames_from_dir(frames_dir, ext=None):
             yield cv2.imread(os.path.join(frames_dir, f))
 
 def create_video_from_frames(frames, output_path, w, h, fps):
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
     writer = cv2.VideoWriter(output_path, fourcc, fps, (w, h))
-
     for image in frames:
-        writer.write(image)
+        writer.write(image.astype('uint8'))
 
     # cv2.destroyAllWindows()
     writer.release()
