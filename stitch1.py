@@ -92,9 +92,9 @@ if __name__ == '__main__':
     corr = get_correspondences(frames)
     print "stitching..."
     new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
-    new_frames_list = [new_frame for new_frame in new_frames]
+    # new_frames_list = [new_frame for new_frame in new_frames]
 
-    save_frames(new_frames_list, 'output')
-    create_video_from_frames(new_frames_list, 'test_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
+    # save_frames(new_frames_list, 'output')
+    create_video_from_frames(new_frames, 'test_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
     print "Done."
 
