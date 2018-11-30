@@ -28,3 +28,21 @@ def get_correspondences(frames):
 
 #     return correspondences
 
+
+def get_correspondences2(frames, dist=4, meth='sift'):
+    corr_per_frame = [[]]
+    for b in range(1, len(frames)):
+        print '   ', (b+1), '/', len(frames)
+        corr = []
+        for a in range(b-1, max(b-1-dist,-1), -1):
+            src, dest = None, None
+            if meth == 'sift':
+                src, dest = sift_matching(frames[a], frames[b])
+            elif meth == 'surf':
+                src, dest = surf_matching(frames[a], frames[b])
+            else:
+                src, dest = orb_matching(frames[a], frames[b])
+            corr.append(src_dest_2_correspondences(src, dest))
+        corr_per_frame.append(corr)
+    # print corr_per_frame[2][0]
+    return corr_per_frame

@@ -34,7 +34,7 @@ def sift_matching(img1, img2):
     for i,m in enumerate(new_matches):
         if m[0].distance < 0.7 *m[1].distance:
               matchesMask[i]=[1,0]
-              good.append(m[0]) 
+              good.append(m[0])
 
     src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
     dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)

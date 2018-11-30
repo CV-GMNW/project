@@ -1,5 +1,5 @@
 import numpy as np
-from get_correspondences import get_correspondences
+from get_correspondences import *
 from orb_matching import orb_matching
 from video import *
 from vid2img import *
@@ -27,6 +27,30 @@ def find_rel_locations(point_correspondences):
 
     return rel_locs
 
+def mean_without_outliers(data, m=2.0):
+    data = np.array(data)
+    return np.mean(data[abs(data - np.mean(data)) < m * np.std(data)])
+
+def find_locations(corrs_per_frame_2):
+    locs = []
+
+    for corrs in corrs_per_frame_2:
+        averaged_loc = [0, 0]
+        num = len(corrs)
+        # print num
+        for j in range(len(corrs)):
+            x_offsets = []
+            y_offsets = []
+            for c in corrs[j]:
+                x_offsets.append(c[1][0] - c[0][0])
+                y_offsets.append(c[1][1] - c[0][1])
+            avg_x_offs = mean_without_outliers(x_offsets)
+            avg_y_offs = mean_without_outliers(y_offsets)
+            averaged_loc[0] += float(locs[-1-j][0] + avg_x_offs) / num
+            averaged_loc[1] += float(locs[-1-j][1] + avg_y_offs) / num
+        locs.append(averaged_loc)
+
+    return np.int32(np.array(locs))
 
 def place_on_black(frame, w, h, x, y):
     stitched_frame = np.zeros((h, w, 3))
@@ -41,14 +65,15 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     global OUTPUT_SIZE
 
     # 1. find frames locations relative to original
-    print "  finding relative locations..."
-    rel_locs = find_rel_locations(point_correspondences)
-    cum_rel_locs = [rel_locs[0]]
-    for loc in rel_locs[1:]:
-        cum_sum = [a + b for [a,b] in zip(cum_rel_locs[-1], loc)]
-        cum_rel_locs.append(cum_sum)
+    print "  finding locations..."
+    # rel_locs = find_rel_locations(point_correspondences)
+    # cum_rel_locs = [rel_locs[0]]
+    # for loc in rel_locs[1:]:
+    #     cum_sum = [a + b for [a,b] in zip(cum_rel_locs[-1], loc)]
+    #     cum_rel_locs.append(cum_sum)
 
-    cum_rel_locs = np.int32(np.array(cum_rel_locs))
+    # cum_rel_locs = np.int32(np.array(cum_rel_locs))
+    cum_rel_locs = find_locations(point_correspondences)
     # print cum_rel_locs
 
     # 2. find size of frame needed
@@ -88,13 +113,14 @@ if __name__ == '__main__':
 
     print "loading frames..."
     frames = list(vid.frames())
-    print "finding corresponding points for every frame pair..."
-    corr = get_correspondences(frames)
+    print "finding corresponding points between frames..."
+    # corr = get_correspondences(frames)
+    corr = get_correspondences2(frames, dist=3, meth='sift')
     print "stitching..."
     new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
     new_frames_list = [new_frame for new_frame in new_frames]
 
     # save_frames(new_frames_list, 'output')
-    create_video_from_frames(new_frames_list, 'test_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
+    create_video_from_frames(new_frames_list, 'test_output_b.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
     print "Done."
 
