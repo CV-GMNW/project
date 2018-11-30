@@ -1,0 +1,31 @@
+testing with 10 keypoints 
+############################################
+
+
+table_number = 32
+key_size = 32
+multi_probe_level = 4
+
+matches - 4
+time = 22.95
+############################################
+table_number = 12
+key_size = 20
+multi_probe_level = 4
+
+matches - 7
+time = .006
+############################################
+table_number = 6
+key_size = 12
+multi_probe_level = 4
+
+matches - 10
+time = .0007
+############################################
+table_number = 6
+key_size = 12
+multi_probe_level = 32
+
+matches - 10
+time = .001

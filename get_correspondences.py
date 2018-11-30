@@ -1,6 +1,8 @@
 ﻿
 import numpy as np
 from orb_matching import orb_matching
+from surf_matching import surf_matching
+from sift_matching import sift_matching
 
 def src_dest_2_correspondences(src_pnts, dest_pnts):
 
@@ -9,7 +11,9 @@ def src_dest_2_correspondences(src_pnts, dest_pnts):
 def get_correspondences(frames):
     correspondences = []
     for i in range(1, len(frames)):
-        src, dest = orb_matching(frames[i-1], frames[i])
+        src, dest = sift_matching(frames[i-1], frames[i])
+        # src, dest = surf_matching(frames[i-1], frames[i])
+        # src, dest = orb_matching(frames[i-1], frames[i])
         correspondences.append(src_dest_2_correspondences(src, dest))
 
     return correspondences
