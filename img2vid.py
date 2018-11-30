@@ -15,11 +15,8 @@ def create_video_from_frames(frames, output_path, w, h, fps):
     writer = cv2.VideoWriter(output_path, fourcc, fps, (w, h))
     for image in frames:
         writer.write(image.astype('uint8'))
-
-    # cv2.destroyAllWindows()
     writer.release()
 
-    # return load_video(output_path)
 
 
 

@@ -17,16 +17,30 @@ def get_correspondences(frames):
         correspondences.append(src_dest_2_correspondences(src, dest))
 
     return correspondences
+    
+def get_correspondences_orb(frames):
+    correspondences = []
+    for i in range(1, len(frames)):
+        src, dest = orb_matching(frames[i-1], frames[i])
+        correspondences.append(src_dest_2_correspondences(src, dest))
 
-# def get_correspondences(frames):
-#     correspondences = np.zeros((len(frames), len(frames)))
-#     for i in range(len(frames) - 1):
-#         for j in range(1, len(frames)):
-#             if j-i >= 1 and j-i <= 5:
-#                 src, dest = orb_matching(frames[i-1], frames[i])
-#                 correspondences[i][j] = src_dest_2_correspondences(src, dest)
+    return correspondences
 
-#     return correspondences
+def get_correspondences_surf(frames):
+    correspondences = []
+    for i in range(1, len(frames)):
+        src, dest = surf_matching(frames[i-1], frames[i])
+        correspondences.append(src_dest_2_correspondences(src, dest))
+
+    return correspondences
+
+def get_correspondences_sift(frames):
+    correspondences = []
+    for i in range(1, len(frames)):
+        src, dest = sift_matching(frames[i-1], frames[i])
+        correspondences.append(src_dest_2_correspondences(src, dest))
+
+    return correspondences
 
 
 def get_correspondences2(frames, dist=4, meth='sift'):
