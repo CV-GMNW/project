@@ -106,7 +106,7 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
 
 
 if __name__ == '__main__':
-    vid = load_video('pano_shaky_5sec_smol.mp4')
+    vid = load_video('still_shaky_subtlepattern_small.mp4')
 
     print_video_characteristics(vid)
     print ""
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     frames = list(vid.frames())
     print "finding corresponding points between frames..."
     # corr = get_correspondences(frames)
-    corr = get_correspondences2(frames, dist=3, meth='sift')
+    corr = get_correspondences2(frames, dist=4, meth='sift')
     print "stitching..."
     new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
     new_frames_list = [new_frame for new_frame in new_frames]
