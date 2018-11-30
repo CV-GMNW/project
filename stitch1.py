@@ -79,7 +79,6 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
         (pos_x, pos_y) = frame_positions[i]
         yield place_on_black(frames[i], w_new, h_new, pos_x, pos_y)
 
-
 if __name__ == '__main__':
     vid = load_video('pano_shaky_5sec_smol.mp4')
 
