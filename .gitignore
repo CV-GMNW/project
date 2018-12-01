@@ -1,3 +1,4 @@
 ﻿*.pyc
 output*/
 test_output.avi
+*.avi

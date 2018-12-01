@@ -7,7 +7,7 @@ from img2vid import *
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
-    vid = load_video('pano_shaky_5sec_smol.mp4')
+    vid = load_video('../project/pano_shaky_5sec_smol.mp4')
 
     print_video_characteristics(vid)
     print ""
