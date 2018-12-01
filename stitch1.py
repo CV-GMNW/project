@@ -169,7 +169,7 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
 
 
 if __name__ == '__main__':
-    vid = load_video('vid_utils/pano_shaky_3sec_small.mp4')
+    vid = load_video('input_videos/pano_shaky_3sec_small.mp4')
 
     print_video_characteristics(vid)
     print ""
