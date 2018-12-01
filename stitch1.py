@@ -131,12 +131,13 @@ def place_on_black(frame, w, h, x, y):
     return stitched_frame
 
 
-def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
-    global OUTPUT_SIZE
+def stabilize(w_orig, h_orig, frames, point_correspondences):
 
     # 1. find frames locations relative to original
-    print "  finding locations..."
+    print "  finding relative locations..."
     relative_locations = np.int64(list(find_locations_2(frames)))
+
+    print "  generating new stabilized frames..."
 
     # 2. find size of frame needed
     min_x = 0
@@ -154,9 +155,6 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
             max_y = rel_loc[1]
     w_new = max_x + 1 - min_x + w_orig
     h_new = max_y + 1 - min_y + h_orig
-
-    OUTPUT_SIZE = (w_new, h_new)
-    print "  generating new frames..."
 
     # 3. position all frames in the new larger frame
     frame_positions = [(x - min_x, y - min_y) for (x, y) in relative_locations]
@@ -180,7 +178,7 @@ if __name__ == '__main__':
     print "finding corresponding points between frames..."
 
     print "stitching..."
-    new_frames = list(stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, None))
+    new_frames = list(stabilize(vid.size()[0], vid.size()[1], frames, None))
 
     print "creating video.."
     create_video_from_frames(new_frames, 'stitch1_output.avi', vid.fps())
