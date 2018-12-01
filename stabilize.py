@@ -54,7 +54,7 @@ from img2vid import *
 
 
 
-def find_locations_2(frames):
+def find_locations_2(frames, method='sift'):
     grays= []
     for f in frames:
         grays.append(cv2.cvtColor(f, cv2.COLOR_BGR2GRAY))
@@ -67,11 +67,21 @@ def find_locations_2(frames):
     for gray in range(len(grays)):
         new_img = grays[gray]
         sift = cv2.xfeatures2d.SIFT_create(nfeatures=1000,nOctaveLayers=3,edgeThreshold=100,sigma=1)
+        if method == 'surf':
+            sift = cv2.xfeatures2d.SURF_create(hessianThreshold=500,nOctaves=4,nOctaveLayers=2,extended=0,upright=0)
+        if method == 'orb':
+            sift = cv2.ORB_create(edgeThreshold=15, patchSize=31, nlevels=8, fastThreshold=20, scaleFactor=2, WTA_K=2,scoreType=cv2.ORB_HARRIS_SCORE, firstLevel=0, nfeatures=50)
 
         kp1, des1 = sift.detectAndCompute(old_img, None)
         kp2, des2 = sift.detectAndCompute(new_img, None)
+
         FLANN_INDEX_KDTREE = 0
         index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+        if method == 'orb':
+            index_params = dict(algorithm = 6,
+                     table_number = 6, # 12
+                     key_size = 12,     # 20
+                     multi_probe_level = 4) #2
 
         search_params = dict(checks=50)
 
@@ -131,7 +141,10 @@ def place_on_black(frame, w, h, x, y):
     return stitched_frame
 
 
-def stabilize(w_orig, h_orig, frames, point_correspondences):
+def stabilize(vid, method='sift'):
+    print "  loading frames..."
+    frames = list(vid.frames())
+    h_orig, w_orig, _ = np.shape(frames[0])
 
     # 1. find frames locations relative to original
     print "  finding relative locations..."
@@ -160,9 +173,12 @@ def stabilize(w_orig, h_orig, frames, point_correspondences):
     frame_positions = [(x - min_x, y - min_y) for (x, y) in relative_locations]
 
     # 4. place frames
+    new_frames = []
     for i in range(len(frames)):
         (pos_x, pos_y) = frame_positions[i]
-        yield place_on_black(frames[i], w_new, h_new, pos_x, pos_y)
+        new_frames.append(place_on_black(frames[i], w_new, h_new, pos_x, pos_y))
+
+    return new_frames
 
 
 
@@ -172,16 +188,11 @@ if __name__ == '__main__':
     print_video_characteristics(vid)
     print ""
 
-    print "loading frames..."
-    frames = list(vid.frames())
-
-    print "finding corresponding points between frames..."
-
-    print "stitching..."
-    new_frames = list(stabilize(vid.size()[0], vid.size()[1], frames, None))
+    print "stabilization:"
+    new_frames = stabilize(vid, method='sift')
 
     print "creating video.."
-    create_video_from_frames(new_frames, 'stitch1_output.avi', vid.fps())
+    create_video_from_frames(new_frames, 'stabilized_output.avi', vid.fps())
 
     print "Done."
 
