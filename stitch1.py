@@ -35,7 +35,7 @@ def find_locations(corrs_per_frame_2):
     locs = []
 
     for corrs in corrs_per_frame_2:
-        averaged_loc = [0, 0]
+        averaged_loc = [0., 0.]
         num = len(corrs)
         # print num
         for j in range(len(corrs)):
@@ -46,8 +46,8 @@ def find_locations(corrs_per_frame_2):
                 y_offsets.append(c[1][1] - c[0][1])
             avg_x_offs = mean_without_outliers(x_offsets)
             avg_y_offs = mean_without_outliers(y_offsets)
-            averaged_loc[0] += float(locs[-1-j][0] + avg_x_offs) / num
-            averaged_loc[1] += float(locs[-1-j][1] + avg_y_offs) / num
+            averaged_loc[0] += float(locs[-1-j][0] + avg_x_offs) / float(num)
+            averaged_loc[1] += float(locs[-1-j][1] + avg_y_offs) / float(num)
         locs.append(averaged_loc)
 
     return np.int32(np.array(locs))
@@ -105,7 +105,7 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
         yield place_on_black(frames[i], w_new, h_new, pos_x, pos_y)
 
 if __name__ == '__main__':
-    vid = load_video('still_shaky_subtlepattern_small.mp4')
+    vid = load_video('vid_utils/pano_shaky_3sec_small.mp4')
 
     print_video_characteristics(vid)
     print ""
@@ -114,12 +114,12 @@ if __name__ == '__main__':
     frames = list(vid.frames())
     print "finding corresponding points between frames..."
     # corr = get_correspondences(frames)
-    corr = get_correspondences2(frames, dist=4, meth='sift')
+    corr = get_correspondences2(frames, dist=3, meth='sift')
     print "stitching..."
     new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
     new_frames_list = [new_frame for new_frame in new_frames]
 
     # save_frames(new_frames_list, 'output')
-    create_video_from_frames(new_frames_list, 'test_output_b.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
+    create_video_from_frames(new_frames_list, 'stitch1_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
     print "Done."
 
