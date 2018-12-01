@@ -148,7 +148,7 @@ def stabilize(vid, method='sift'):
 
     # 1. find frames locations relative to original
     print "  finding relative locations..."
-    relative_locations = np.int64(list(find_locations_2(frames)))
+    relative_locations = np.int64(list(find_locations_2(frames, method)))
 
     print "  generating new stabilized frames..."
 
