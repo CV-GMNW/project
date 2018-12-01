@@ -68,7 +68,7 @@ def find_locations_2(frames, method='sift'):
         if method == 'surf':
             sift = cv2.xfeatures2d.SURF_create(hessianThreshold=500,nOctaves=4,nOctaveLayers=2,extended=0,upright=0)
         if method == 'orb':
-            sift = cv2.ORB_create(edgeThreshold=15, patchSize=31, nlevels=8, fastThreshold=20, scaleFactor=2, WTA_K=2,scoreType=cv2.ORB_HARRIS_SCORE, firstLevel=0, nfeatures=50)
+            sift = cv2.ORB_create(edgeThreshold=15, patchSize=31, nlevels=8, fastThreshold=20, scaleFactor=2, WTA_K=2,scoreType=cv2.ORB_HARRIS_SCORE, firstLevel=0, nfeatures=1000)
 
         kp1, des1 = sift.detectAndCompute(old_img, None)
         kp2, des2 = sift.detectAndCompute(new_img, None)
