@@ -1,6 +1,4 @@
 import numpy as np
-from get_correspondences import *
-from orb_matching import orb_matching
 from video import *
 from vid2img import *
 from img2vid import *
@@ -189,7 +187,7 @@ if __name__ == '__main__':
     print ""
 
     print "stabilization:"
-    new_frames = stabilize(vid, method='sift')
+    new_frames = stabilize(vid, method='orb')
 
     print "creating video.."
     create_video_from_frames(new_frames, 'stabilized_output.avi', vid.fps())
