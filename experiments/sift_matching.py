@@ -48,5 +48,5 @@ def sift_matching_experiments(img1,edgeThreshold):
     plt.figure()
     plt.title('sift edgeThreshold =' + str(edgeThreshold))
     plt.imshow(img)
-    plt.savefig('./sift testing/sift edgeThreshold =' + str(edgeThreshold) +'.png')
+    plt.savefig('../sift testing/sift edgeThreshold =' + str(edgeThreshold) +'.png')
 

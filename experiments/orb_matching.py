@@ -38,14 +38,14 @@ def orb_matching(img1, img2):
   for i,m in enumerate(new_matches):
       if m[0].distance < 0.7 *m[1].distance:
           matchesMask[i]=[1,0]
-          good.append(m[0])     
+          good.append(m[0])
 
   src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 2)
   dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
 
 
   return src_pts, dst_pts
-  
+
 def orb_matching_experiments(img1, nfeatures):
   orb = cv2.ORB_create(edgeThreshold=15, patchSize=31, nlevels=8, fastThreshold=20, scaleFactor=2, WTA_K=2,scoreType=cv2.ORB_HARRIS_SCORE, firstLevel=0, nfeatures=nfeatures)
 
@@ -54,4 +54,4 @@ def orb_matching_experiments(img1, nfeatures):
   plt.figure()
   plt.title('orb nfeatures =' + str(nfeatures))
   plt.imshow(img)
-  plt.savefig('./orb testing/orb nfeatures =' + str(nfeatures) +'.png')
+  plt.savefig('../orb testing/orb nfeatures =' + str(nfeatures) +'.png')

@@ -1,4 +1,6 @@
+
 import numpy as np
+import sys
 from video import *
 from vid2img import *
 from img2vid import *
@@ -181,16 +183,20 @@ def stabilize(vid, method='sift'):
 
 
 if __name__ == '__main__':
-    vid = load_video('input_videos/pano_shaky_3sec_small.mp4')
+    input_video_path = sys.argv[1]
+    output_video_path = sys.argv[2]
+    method = sys.argv[3].lower()
+
+    vid = load_video(input_video_path)
 
     print_video_characteristics(vid)
     print ""
 
     print "stabilization:"
-    new_frames = stabilize(vid, method='orb')
+    new_frames = stabilize(vid, method=method)
 
     print "creating video.."
-    create_video_from_frames(new_frames, 'stabilized_output.avi', vid.fps())
+    create_video_from_frames(new_frames, output_video_path, vid.fps())
 
     print "Done."
 

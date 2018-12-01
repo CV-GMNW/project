@@ -34,7 +34,7 @@ def surf_matching(img1, img2):
     for i,m in enumerate(new_matches):
         if m[0].distance < 0.7 *m[1].distance:
               matchesMask[i]=[1,0]
-              good.append(m[0]) 
+              good.append(m[0])
 
     src_pts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
     dst_pts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
@@ -48,4 +48,4 @@ def surf_matching_experiments(img1,hessianThreshold):
     plt.figure()
     plt.title('sift hessianThreshold =' + str(hessianThreshold))
     plt.imshow(img)
-    plt.savefig('./surf testing/surf hessianThreshold =' + str(hessianThreshold) +'.png')
+    plt.savefig('../surf testing/surf hessianThreshold =' + str(hessianThreshold) +'.png')
