@@ -73,7 +73,8 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     #     cum_rel_locs.append(cum_sum)
 
     # cum_rel_locs = np.int32(np.array(cum_rel_locs))
-    cum_rel_locs = find_locations(point_correspondences)
+    # cum_rel_locs = find_locations(point_correspondences)
+    cum_rel_locs = np.int64(list(test(frames)))
     # print cum_rel_locs
 
     # 2. find size of frame needed
@@ -103,6 +104,8 @@ def stitch_frames_METHOD_1(w_orig, h_orig, frames, point_correspondences):
     for i in range(len(frames)):
         (pos_x, pos_y) = frame_positions[i]
         yield place_on_black(frames[i], w_new, h_new, pos_x, pos_y)
+
+
 def test(frames):
     grays= []
     for f in frames:
@@ -161,16 +164,20 @@ def test(frames):
         x_total = cumulative_x_shift
         y_total = cumulative_y_shift
 
-        correction_transformation=np.matrix([[1, 0, -x_total], [0, 1, -y_total]])
+        # correction_transformation=np.matrix([[1, 0, -x_total], [0, 1, -y_total]])
 
 
-        stabilized_frame = cv2.warpAffine(frames[gray],correction_transformation,(cols+1000,rows+1000),flags=cv2.INTER_NEAREST|cv2.WARP_INVERSE_MAP)
+        # stabilized_frame = cv2.warpAffine(frames[gray],correction_transformation,(cols+1000,rows+1000),flags=cv2.INTER_NEAREST|cv2.WARP_INVERSE_MAP)
 
-        cv2.imshow('original frame',frames[gray])
-        cv2.imshow('stabilised frame',stabilized_frame)
-        cv2.waitKey(inter_frame_delay)
+        # cv2.imshow('original frame',frames[gray])
+        # cv2.imshow('stabilised frame',stabilized_frame)
+        # cv2.waitKey(inter_frame_delay)
+
+        yield [x_total, y_total]
 
         old_img = new_img
+
+
 if __name__ == '__main__':
     vid = load_video('vid_utils/pano_shaky_3sec_small.mp4')
 
@@ -183,11 +190,11 @@ if __name__ == '__main__':
     # corr = get_correspondences(frames)
     # corr = get_correspondences2(frames, dist=3, meth='sift')
     print "stitching..."
-    test(frames)
-    # new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, corr)
-    # new_frames_list = [new_frame for new_frame in new_frames]
+    # test(frames)
+    new_frames = stitch_frames_METHOD_1(vid.size()[0], vid.size()[1], frames, None)
+    new_frames_list = [new_frame for new_frame in new_frames]
 
     # save_frames(new_frames_list, 'output')
-    # create_video_from_frames(new_frames_list, 'stitch1_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
+    create_video_from_frames(new_frames_list, 'stitch1_output.avi', OUTPUT_SIZE[0], OUTPUT_SIZE[1], vid.fps())
     print "Done."
 
